@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Movie shelf">
+  <!-- Warm paper ground, so the mark reads on light and dark tab bars alike. -->
+  <rect width="32" height="32" rx="7" fill="#e6e3dc"/>
+
+  <!-- The shelf line the cases stand on. -->
+  <rect x="4.5" y="25" width="23" height="1.6" rx="0.8" fill="#3f3a33" opacity="0.32"/>
+
+  <!-- Keepcase spines. Thickness varies the way it does on the real shelf —
+       single disc through boxset — which is the whole visual idea. -->
+  <rect x="5.5" y="8.5" width="4.5" height="16.5" rx="0.8" fill="#3f3a33"/>
+  <rect x="11" y="6" width="7" height="19" rx="0.8" fill="#9a7b45"/>
+  <rect x="19" y="7.5" width="5" height="17.5" rx="0.8" fill="#6e675c"/>
+  <rect x="25" y="10.5" width="3" height="14.5" rx="0.8" fill="#8a6d3f"/>
+</svg>
