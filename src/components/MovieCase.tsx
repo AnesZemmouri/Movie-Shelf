@@ -48,6 +48,9 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
   }, []);
 
   const enter = useCallback(() => {
+    // Touch devices should tap straight into the detail view, without a
+    // synthetic hover state getting stuck over the case.
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     if (leaveTimer.current !== null) {
       window.clearTimeout(leaveTimer.current);
       leaveTimer.current = null;
