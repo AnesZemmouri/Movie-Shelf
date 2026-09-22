@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Movie } from "../data/movies";
 import { MovieCase } from "./MovieCase";
 import { MovieDetail } from "./MovieDetail";
@@ -28,7 +35,11 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
   const caseEls = useRef<(HTMLButtonElement | null)[]>([]);
   const carry = useRef<number | null>(null);
   const rafPending = useRef(false);
-  const drag = useRef<{ startX: number; startScroll: number; moved: boolean } | null>(null);
+  const drag = useRef<{
+    startX: number;
+    startScroll: number;
+    moved: boolean;
+  } | null>(null);
   /** Set once a press becomes a drag, so the click that follows a drag doesn't
    *  open the case the user was only trying to scroll past. */
   const suppressClick = useRef(false);
@@ -46,7 +57,8 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
 
   // The DOM row is either 3 copies (looped) or 1.
   const row = useMemo(
-    () => (looping ? Array.from({ length: COPIES }, () => movies).flat() : movies),
+    () =>
+      looping ? Array.from({ length: COPIES }, () => movies).flat() : movies,
     [looping, movies],
   );
 
@@ -165,7 +177,12 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
     if (!justAdded) return;
     const idx = row.findIndex((m) => m.id === justAdded);
     const node = caseEls.current[idx];
-    if (node) node.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    if (node)
+      node.scrollIntoView({
+        inline: "center",
+        block: "nearest",
+        behavior: "smooth",
+      });
   }, [justAdded, row]);
 
   const openAt = useCallback(
@@ -243,7 +260,7 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
         onPointerLeave={() => {
           drag.current = null;
         }}
-        className={`no-scrollbar flex cursor-grab items-end gap-[2px] overflow-x-auto pt-16 pb-6 active:cursor-grabbing ${
+        className={`shelf-scroller no-scrollbar flex cursor-grab items-end gap-0 overflow-x-auto pt-16 pb-6 active:cursor-grabbing ${
           overflows ? "" : "justify-center"
         }`}
         style={{ perspective: 1400, perspectiveOrigin: "50% 65%" }}
@@ -264,14 +281,14 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
       {/* edge fades — only meaningful when the row actually overflows */}
       {overflows ? (
         <>
-          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r to-transparent" />
-          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l to-transparent" />
+          <div className="shelf-edge-fade from-background pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r to-transparent" />
+          <div className="shelf-edge-fade from-background pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l to-transparent" />
         </>
       ) : null}
 
       {/* shelf lip + ground shadow */}
-      <div className="pointer-events-none relative -mt-6 h-px w-full bg-gradient-to-r from-transparent via-foreground/25 to-transparent" />
-      <div className="from-foreground/8 pointer-events-none h-10 w-full bg-gradient-to-b to-transparent blur-[2px]" />
+      <div className="shelf-rail pointer-events-none relative -mt-6 h-3 w-full" />
+      <div className="shelf-ground pointer-events-none h-10 w-full" />
 
       {open ? (
         <MovieDetail

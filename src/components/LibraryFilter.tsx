@@ -51,7 +51,8 @@ export function LibraryFilter({ movies, onChange, className }: Props) {
 
   // A genre the library no longer contains (after a re-import) simply stops
   // counting as selected, rather than being cleared by an effect.
-  const activeGenre = genre !== null && genres.some((g) => g.name === genre) ? genre : null;
+  const activeGenre =
+    genre !== null && genres.some((g) => g.name === genre) ? genre : null;
 
   useEffect(() => {
     const term = query.trim();
@@ -68,7 +69,11 @@ export function LibraryFilter({ movies, onChange, className }: Props) {
         })
         .catch(() => {
           if (id === reqId.current)
-            setResult({ q: term, ids: [], error: "Couldn't read the shelves." });
+            setResult({
+              q: term,
+              ids: [],
+              error: "Couldn't read the shelves.",
+            });
         });
     }, DEBOUNCE_MS);
 
@@ -85,8 +90,11 @@ export function LibraryFilter({ movies, onChange, className }: Props) {
     if (ranked === null && activeGenre === null) return null;
 
     const byId = new Map(movies.map((m) => [m.id, m]));
-    const list = ranked === null ? movies : ranked.flatMap((id) => byId.get(id) ?? []);
-    return activeGenre ? list.filter((m) => m.genres?.includes(activeGenre)) : list;
+    const list =
+      ranked === null ? movies : ranked.flatMap((id) => byId.get(id) ?? []);
+    return activeGenre
+      ? list.filter((m) => m.genres?.includes(activeGenre))
+      : list;
   }, [ranked, activeGenre, movies]);
 
   // `visible === null` means "no filter at all" — the parent shows the full
@@ -104,14 +112,19 @@ export function LibraryFilter({ movies, onChange, className }: Props) {
         : `${visible?.length ?? 0} found`;
 
   return (
-    <div className={className}>
+    <div className={`catalog-controls ${className ?? ""}`}>
+      <div className="catalog-label">
+        <span>Browse the collection</span>
+        <span className="catalog-rule" />
+        <span>{genres.length} genres indexed</span>
+      </div>
       <input
         type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="What are you in the mood for?"
-        aria-label="What are you in the mood for?"
-        className="border-border bg-card/60 placeholder:text-muted-foreground focus:border-primary w-full rounded-sm border px-4 py-3 text-[15px] outline-none transition-colors"
+        placeholder="Search title, director, or mood"
+        aria-label="Search title, director, or mood"
+        className="catalog-search border-border bg-card/60 placeholder:text-muted-foreground focus:border-primary w-full rounded-sm border px-4 py-3 text-[15px] outline-none transition-colors"
       />
 
       <div className="mt-3 flex items-baseline justify-between gap-4">

@@ -10,30 +10,30 @@
    --------------------------------------------------------------------------- */
 
 :root {
-  --background: oklch(0.895 0.004 95);
-  --foreground: oklch(0.28 0.008 80);
+  --background: oklch(0.2 0.018 48);
+  --foreground: oklch(0.91 0.025 82);
 
-  --card: oklch(0.93 0.004 95);
-  --card-foreground: oklch(0.28 0.008 80);
+  --card: oklch(0.25 0.02 48);
+  --card-foreground: oklch(0.91 0.025 82);
 
-  --primary: oklch(0.5 0.085 52);
-  --primary-foreground: oklch(0.96 0.004 95);
+  --primary: oklch(0.72 0.14 62);
+  --primary-foreground: oklch(0.18 0.018 48);
 
-  --secondary: oklch(0.86 0.006 90);
-  --secondary-foreground: oklch(0.32 0.008 80);
+  --secondary: oklch(0.3 0.026 48);
+  --secondary-foreground: oklch(0.91 0.025 82);
 
-  --muted: oklch(0.86 0.006 90);
-  --muted-foreground: oklch(0.5 0.008 85);
+  --muted: oklch(0.3 0.026 48);
+  --muted-foreground: oklch(0.64 0.025 72);
 
-  --accent: oklch(0.82 0.02 80);
-  --accent-foreground: oklch(0.3 0.008 80);
+  --accent: oklch(0.35 0.035 42);
+  --accent-foreground: oklch(0.92 0.025 82);
 
   --destructive: oklch(0.52 0.14 28);
-  --border: oklch(0.82 0.006 90);
-  --input: oklch(0.82 0.006 90);
-  --ring: oklch(0.5 0.085 52);
+  --border: oklch(0.42 0.035 48);
+  --input: oklch(0.42 0.035 48);
+  --ring: oklch(0.72 0.14 62);
 
-  --glow: oklch(0.92 0.03 80);
+  --glow: oklch(0.38 0.08 56);
 
   --radius: 0.25rem;
 }
@@ -91,6 +91,282 @@
     background: var(--color-primary);
     color: var(--color-primary-foreground);
   }
+}
+
+.archive-room {
+  background:
+    radial-gradient(
+      ellipse 70% 45% at 50% -4%,
+      rgba(184, 120, 43, 0.18),
+      transparent 68%
+    ),
+    linear-gradient(180deg, #241c18 0%, #1b1715 58%, #110f0e 100%);
+}
+
+.archive-header {
+  position: relative;
+  z-index: 2;
+}
+
+.archive-kicker {
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 0.65rem;
+}
+
+.archive-status {
+  color: var(--color-muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.archive-status i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 12px var(--color-primary);
+}
+
+.archive-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  color: var(--color-muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.archive-stat strong {
+  color: var(--color-foreground);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 0.8;
+}
+
+.catalog-controls {
+  position: relative;
+}
+
+.catalog-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+  color: var(--color-muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.catalog-rule {
+  height: 1px;
+  flex: 1;
+  background: var(--color-border);
+}
+
+.catalog-search {
+  border-color: color-mix(in oklch, var(--color-primary) 35%, transparent);
+  background: rgba(24, 19, 17, 0.72);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.archive-main {
+  position: relative;
+  min-height: 410px;
+}
+
+.archive-main::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 7%;
+  right: 7%;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(214, 145, 50, 0.14);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.archive-footer {
+  border-top: 1px solid
+    color-mix(in oklch, var(--color-border) 55%, transparent);
+}
+
+.shelf-scroller {
+  position: relative;
+  isolation: isolate;
+  min-height: 330px;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0 76%,
+      rgba(0, 0, 0, 0.16) 76% 77%,
+      transparent 77%
+    ),
+    radial-gradient(
+      ellipse 64% 28% at 50% 92%,
+      rgba(0, 0, 0, 0.34),
+      transparent 72%
+    );
+}
+
+.dvd-shelf-case {
+  filter: drop-shadow(0 8px 7px rgba(0, 0, 0, 0.16));
+}
+
+.dvd-case-body {
+  will-change: transform;
+}
+
+.shelf-rail {
+  margin-top: -1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+  background: linear-gradient(
+    180deg,
+    rgba(164, 117, 63, 0.32),
+    rgba(42, 27, 19, 0.82)
+  );
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.32),
+    inset 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.shelf-ground {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.26), transparent 80%);
+}
+
+.movie-detail-panel {
+  border-left: 1px solid
+    color-mix(in oklch, var(--color-primary) 55%, transparent);
+  padding-left: 1.25rem;
+}
+
+@media (max-width: 560px) {
+  .archive-header {
+    padding-top: 1.5rem;
+  }
+  .archive-header > div:first-child p {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+  }
+  .archive-kicker {
+    font-size: 8px;
+  }
+  .archive-stat {
+    gap: 6px;
+    font-size: 8px;
+  }
+  .archive-stat strong {
+    font-size: 2.3rem;
+  }
+  .archive-header .mt-5 {
+    margin-top: 1.25rem;
+  }
+  .archive-header .mt-9 {
+    margin-top: 1.5rem;
+  }
+  .archive-main {
+    min-height: 285px;
+    margin-top: 0.25rem;
+  }
+  .shelf-scroller {
+    min-height: 285px;
+    padding-top: 2.25rem;
+    padding-bottom: 1.25rem;
+  }
+  .shelf-edge-fade {
+    width: 2.25rem;
+  }
+  .archive-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .catalog-label span:last-child {
+    display: none;
+  }
+  .movie-detail-panel {
+    padding-left: 1rem;
+  }
+}
+
+/* Physical details shared by the narrow shelf spines and their folded covers. */
+.dvd-shell-wrap {
+  pointer-events: none;
+  background-size: 220% 100%;
+  background-position: center;
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(
+    108deg,
+    transparent 8%,
+    #000 44%,
+    transparent 62%
+  );
+  mask-image: linear-gradient(
+    108deg,
+    transparent 8%,
+    #000 44%,
+    transparent 62%
+  );
+}
+
+.dvd-wrap-seam {
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.65),
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(0, 0, 0, 0.4)
+  );
+  opacity: 0.5;
+}
+
+.dvd-cover-wrap {
+  pointer-events: none;
+  background:
+    linear-gradient(
+      112deg,
+      transparent 29%,
+      rgba(255, 255, 255, 0.3) 43%,
+      transparent 53%
+    ),
+    linear-gradient(
+      72deg,
+      transparent 54%,
+      rgba(119, 255, 212, 0.14) 64%,
+      transparent 76%
+    );
+  mix-blend-mode: screen;
+}
+
+.dvd-cover-border {
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.22),
+    inset 0 0 18px rgba(210, 255, 235, 0.08);
+}
+
+.dvd-case-bottom {
+  pointer-events: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 /* ---------------------------------------------------------------------------
@@ -195,4 +471,415 @@
 
 @utility animate-caret-pulse {
   animation: caret-pulse 1.1s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Focused DVD object
+   --------------------------------------------------------------------------- */
+
+.dvd-showcase {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: center;
+  gap: 5vw;
+  padding: 4rem clamp(1.25rem, 6vw, 7rem);
+  overflow: hidden;
+  background: #090b0d;
+  color: #e7efe7;
+}
+
+.dvd-stage {
+  position: relative;
+  min-height: min(78vh, 760px);
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+}
+
+.dvd-halo {
+  position: absolute;
+  width: min(70vw, 650px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(102, 177, 124, 0.2),
+    transparent 65%
+  );
+  filter: blur(26px);
+  pointer-events: none;
+}
+
+.dvd-object {
+  position: relative;
+  z-index: 2;
+  width: clamp(250px, 31vw, 390px);
+  aspect-ratio: 0.72;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  transform: rotateX(calc(var(--pointer-y) * var(--tilt) * -1))
+    rotateY(calc(var(--pointer-x) * var(--tilt)))
+    rotateZ(calc(var(--pointer-x) * -2deg));
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.dvd-object:hover {
+  filter: drop-shadow(0 36px 35px rgba(0, 0, 0, 0.5));
+}
+
+.dvd-turntable {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dvd-object.is-open .dvd-turntable {
+  transform: translateX(calc(var(--depth) * -0.5)) rotateY(-72deg);
+}
+
+/* Pointer movement only controls the outer parallax shell. The DVD turntable
+   above is intentionally changed only by the clicked .is-open state. */
+
+.dvd-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(172, 217, 194, 0.32);
+  border-radius: 24px;
+  backface-visibility: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 0 34px rgba(115, 201, 151, 0.08),
+    0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.dvd-cover-front {
+  transform: translateZ(1px);
+  background: #0d1416;
+}
+
+.dvd-cover-front > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.55) contrast(1.08) brightness(0.62);
+  opacity: 0.64;
+  mix-blend-mode: screen;
+}
+
+.dvd-poster-ink {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    150deg,
+    rgba(11, 28, 23, 0.92),
+    rgba(3, 10, 14, 0.18) 46%,
+    rgba(4, 9, 12, 0.9)
+  );
+}
+
+.dvd-hologram {
+  position: absolute;
+  inset: -12%;
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: screen;
+  opacity: var(--hologram);
+  filter: hue-rotate(80deg) saturate(1.8) contrast(1.35) brightness(1.3);
+  transform: rotate(-7deg) scale(1.14);
+  pointer-events: none;
+}
+
+.dvd-map-grid {
+  position: absolute;
+  inset: 0;
+  opacity: calc(var(--hologram) * 0.7);
+  background:
+    linear-gradient(
+      30deg,
+      transparent 48%,
+      rgba(125, 212, 155, 0.22) 49%,
+      transparent 50%
+    ),
+    linear-gradient(
+      150deg,
+      transparent 48%,
+      rgba(106, 197, 153, 0.18) 49%,
+      transparent 50%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 44px,
+      rgba(120, 200, 158, 0.08) 45px 46px
+    );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.dvd-title-lockup {
+  position: absolute;
+  z-index: 3;
+  right: 14%;
+  bottom: 12%;
+  left: 11%;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+  color: #e7f1e8;
+  text-shadow: 0 2px 14px #000;
+}
+
+.dvd-title-lockup small,
+.dvd-title-lockup span {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.dvd-title-lockup strong {
+  max-width: 8ch;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  font-weight: 400;
+  line-height: 0.82;
+}
+
+.dvd-shrink-wrap {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  background:
+    linear-gradient(
+      calc(115deg + var(--pointer-x) * 15deg),
+      transparent 27%,
+      rgba(207, 255, 226, calc(var(--wrap) * 0.38)) 42%,
+      rgba(255, 255, 255, 0.04) 48%,
+      transparent 58%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 3px,
+      rgba(180, 255, 214, calc(var(--wrap) * 0.025)) 4px 5px
+    );
+  opacity: var(--wrap);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.dvd-edge-glint {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  border: 1px solid rgba(221, 255, 237, 0.28);
+  border-radius: inherit;
+  box-shadow: inset 0 0 12px rgba(213, 255, 229, calc(var(--wrap) * 0.25));
+  pointer-events: none;
+}
+
+.dvd-cover-back {
+  display: grid;
+  align-content: end;
+  gap: 10px;
+  padding: 12%;
+  color: #bddac5;
+  background: #091011;
+  transform: rotateY(180deg) translateZ(1px);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-align: left;
+}
+
+.dvd-back-map {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.23;
+  filter: grayscale(1) hue-rotate(80deg) contrast(1.4);
+  mix-blend-mode: screen;
+}
+
+.dvd-info {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 1%;
+  width: min(28rem, 34vw);
+  opacity: 0;
+  transform: translate3d(24px, -50%, 0);
+  transition:
+    opacity 500ms ease,
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.dvd-info.is-visible {
+  opacity: 1;
+  transform: translate3d(0, -50%, 0);
+}
+
+.dvd-info-index,
+.dvd-action,
+.dvd-meta {
+  color: #7aa88a;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.dvd-info h1 {
+  margin: 18px 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4vw, 4.3rem);
+  font-weight: 300;
+  line-height: 0.9;
+}
+
+.dvd-director {
+  color: #b2c0b5;
+  font-size: 15px;
+}
+.dvd-meta {
+  margin-top: 18px;
+  color: #88a692;
+}
+.dvd-meta i {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin: 0 8px 2px;
+  border-radius: 50%;
+  background: #78bd8d;
+}
+.dvd-blurb {
+  margin-top: 24px;
+  max-width: 35ch;
+  color: #89998d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.dvd-action {
+  display: block;
+  margin-top: 30px;
+  opacity: 0.65;
+}
+
+.dvd-controls {
+  position: relative;
+  z-index: 4;
+  align-self: end;
+  display: grid;
+  gap: 18px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(139, 186, 150, 0.25);
+}
+
+.dvd-controls-heading,
+.dvd-control > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dvd-controls-heading {
+  color: #d6e4d8;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.dvd-controls-heading button {
+  padding: 0;
+  border: 0;
+  color: #77b589;
+  background: transparent;
+  font: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.dvd-control {
+  display: grid;
+  gap: 8px;
+  color: #7f9685;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.dvd-control output {
+  color: #bedbc4;
+}
+.dvd-control input {
+  width: 100%;
+  accent-color: #7bbe8e;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .dvd-showcase {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 2rem 1.25rem 3rem;
+  }
+  .dvd-stage {
+    min-height: 76vh;
+  }
+  .dvd-info {
+    top: auto;
+    right: 0;
+    bottom: 4%;
+    width: 42%;
+    transform: translate3d(24px, 0, 0);
+  }
+  .dvd-info.is-visible {
+    transform: translate3d(0, 0, 0);
+  }
+  .dvd-info h1 {
+    font-size: clamp(2rem, 8vw, 3.6rem);
+  }
+  .dvd-controls {
+    width: min(100%, 420px);
+    justify-self: center;
+    grid-template-columns: 1fr 1fr;
+  }
+  .dvd-controls-heading {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .dvd-stage {
+    min-height: 700px;
+    align-items: start;
+    padding-top: 12vh;
+  }
+  .dvd-object {
+    width: min(76vw, 310px);
+  }
+  .dvd-info {
+    right: 0;
+    bottom: 2%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .dvd-info h1 {
+    margin-top: 10px;
+  }
+  .dvd-blurb {
+    display: none;
+  }
+  .dvd-title-lockup strong {
+    font-size: 2.2rem;
+  }
 }

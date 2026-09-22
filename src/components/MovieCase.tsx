@@ -96,7 +96,7 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
         ref={setRefs}
         type="button"
         aria-label={`${movie.title}, ${movie.year}`}
-        className="relative shrink-0 cursor-pointer outline-none"
+        className="dvd-shelf-case relative shrink-0 cursor-pointer outline-none"
         style={{
           width,
           height,
@@ -114,7 +114,7 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
       >
         {/* ...and the inner span is the only thing that moves. */}
         <span
-          className={`absolute inset-0 block ${justAdded ? "animate-shelve-in" : ""}`}
+          className={`dvd-case-body absolute inset-0 block ${justAdded ? "animate-shelve-in" : ""}`}
           style={{
             transformStyle: "preserve-3d",
             transform: `rotateY(var(--ry, 0deg)) rotateZ(${hovered ? 0 : movie.lean}deg) translateZ(${
@@ -130,7 +130,7 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
             style={{
               backgroundColor: spine,
               borderRadius: 1,
-              boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.06)`,
+              boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.14), inset -2px 0 0 rgba(0,0,0,0.24), 0 10px 13px rgba(0,0,0,0.22)`,
             }}
           >
             {/* poster-art wraparound: the poster's own left edge bleeds onto the spine */}
@@ -213,7 +213,13 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
             {width >= 26 ? (
               <span
                 className="font-mono absolute inset-x-0 flex justify-center"
-                style={{ bottom: 5, color: ink, opacity: 0.6, fontSize: 6.5, letterSpacing: "0.1em" }}
+                style={{
+                  bottom: 5,
+                  color: ink,
+                  opacity: 0.6,
+                  fontSize: 6.5,
+                  letterSpacing: "0.1em",
+                }}
               >
                 {movie.rating > 0 ? movie.rating : "—"}
               </span>
@@ -230,6 +236,16 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
                 pointerEvents: "none",
               }}
             />
+
+            {/* Clear shrink-wrap catches light independently from the printed spine. */}
+            <span
+              className="dvd-shell-wrap absolute inset-0 block"
+              style={{
+                backgroundImage: `url("/5875003108012789722.jpg")`,
+                opacity: movie.finish === "clear" ? 0.2 : 0.08,
+              }}
+            />
+            <span className="dvd-wrap-seam absolute inset-y-0 right-[3px] block w-px" />
 
             {/* plastic sheen — clear shells get a tight, bright specular; matte
                 sleeves get a broad, soft one */}
@@ -261,7 +277,8 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
             <span
               className="absolute inset-0 block"
               style={{
-                boxShadow: "inset 1px 0 0 rgba(255,255,255,0.18), inset -1px 0 0 rgba(0,0,0,0.25)",
+                boxShadow:
+                  "inset 1px 0 0 rgba(255,255,255,0.18), inset -1px 0 0 rgba(0,0,0,0.25)",
                 pointerEvents: "none",
               }}
             />
@@ -285,6 +302,8 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
               backfaceVisibility: "hidden",
               backgroundColor: spine,
               borderRadius: 2,
+              boxShadow:
+                "0 6px 14px rgba(0,0,0,0.22), inset 1px 0 rgba(255,255,255,0.25)",
             }}
           >
             {movie.poster ? (
@@ -303,6 +322,8 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
                 {movie.title}
               </span>
             )}
+            <span className="dvd-cover-wrap absolute inset-0 block" />
+            <span className="dvd-cover-border absolute inset-0 block" />
           </span>
 
           {/* ---- top edge of the case --------------------------------------- */}
@@ -320,6 +341,16 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
                 "linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.62) 100%)",
             }}
           />
+          <span
+            className="dvd-case-bottom absolute inset-x-0 bottom-0 block"
+            style={{
+              height: 8,
+              transformOrigin: "bottom center",
+              transform: `rotateX(-${TOP_TILT - 8}deg)`,
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.15), rgba(0,0,0,0.62))",
+            }}
+          />
         </span>
       </button>
 
@@ -334,8 +365,12 @@ export function MovieCase({ movie, onOpen, caseRef, justAdded }: Props) {
               }}
             >
               <div className="animate-rise border border-border/70 bg-card/95 px-4 py-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-                <p className="font-display text-[20px] leading-tight font-normal">{movie.title}</p>
-                <p className="text-muted-foreground mt-0.5 text-[15px]">{movie.director}</p>
+                <p className="font-display text-[20px] leading-tight font-normal">
+                  {movie.title}
+                </p>
+                <p className="text-muted-foreground mt-0.5 text-[15px]">
+                  {movie.director}
+                </p>
                 <p className="font-mono mt-1.5 text-[14px] tracking-wide uppercase opacity-70">
                   {movie.year}
                   {movie.runtime > 0 ? ` · ${movie.runtime}m` : ""}

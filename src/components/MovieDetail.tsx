@@ -45,14 +45,17 @@ export function MovieDetail({
   }));
 
   useEffect(() => {
-    const onResize = () => setVp({ w: window.innerWidth, h: window.innerHeight });
+    const onResize = () =>
+      setVp({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
   // Kick the transition on the next frame so the browser paints the shelf pose first.
   useEffect(() => {
-    const id = requestAnimationFrame(() => requestAnimationFrame(() => setOut(true)));
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setOut(true)),
+    );
     return () => cancelAnimationFrame(id);
   }, []);
 
@@ -80,22 +83,26 @@ export function MovieDetail({
 
   const geom = useMemo(() => {
     const narrow = vp.w < 720;
-    const posterH = Math.min(vp.h * (narrow ? 0.42 : 0.6), 480);
+    const posterH = Math.min(vp.h * (narrow ? 0.35 : 0.6), 480);
     const scale = posterH / rect.height;
     const posterW = POSTER_W * scale;
 
-    const posterLeft = narrow ? (vp.w - posterW) / 2 : Math.max(24, vp.w * 0.12);
-    const posterTop = narrow ? vp.h * 0.14 : (vp.h - posterH) / 2;
+    const posterLeft = narrow
+      ? (vp.w - posterW) / 2
+      : Math.max(24, vp.w * 0.12);
+    const posterTop = narrow ? Math.max(34, vp.h * 0.08) : (vp.h - posterH) / 2;
 
     // The cover's centre lands at (rect.left + rect.width + posterW/2,
     // rect.top + rect.height/2) before translation, so solve for the delta.
-    const dx = posterLeft + posterW / 2 - (rect.left + rect.width + posterW / 2);
+    const dx =
+      posterLeft + posterW / 2 - (rect.left + rect.width + posterW / 2);
     const dy = posterTop + posterH / 2 - (rect.top + rect.height / 2);
 
     return { narrow, scale, posterW, posterH, posterLeft, posterTop, dx, dy };
   }, [vp, rect]);
 
-  const { narrow, scale, posterW, posterH, posterLeft, posterTop, dx, dy } = geom;
+  const { narrow, scale, posterW, posterH, posterLeft, posterTop, dx, dy } =
+    geom;
   const font = faceFont[movie.face];
 
   return (
@@ -135,7 +142,12 @@ export function MovieDetail({
           }}
         >
           {movie.poster ? (
-            <img src={movie.poster} alt="" className="h-full w-full object-cover" draggable={false} />
+            <img
+              src={movie.poster}
+              alt=""
+              className="h-full w-full object-cover"
+              draggable={false}
+            />
           ) : (
             <div
               className={`flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center ${font}`}
@@ -156,7 +168,7 @@ export function MovieDetail({
         style={{
           left: narrow ? 24 : posterLeft + posterW + 48,
           right: narrow ? 24 : 48,
-          top: narrow ? posterTop + posterH + 28 : posterTop,
+          top: narrow ? posterTop + posterH + 18 : posterTop,
           opacity: out ? 1 : 0,
           transform: out ? "translateY(0)" : "translateY(14px)",
           transition: `opacity 700ms ease ${out ? 260 : 0}ms, transform 700ms cubic-bezier(0.16,1,0.3,1) ${
@@ -164,7 +176,7 @@ export function MovieDetail({
           }ms`,
         }}
       >
-        <div className="max-w-[30rem]">
+        <div className="movie-detail-panel max-w-[30rem]">
           <p className="font-mono text-muted-foreground text-[11px] tracking-[0.22em] uppercase">
             {movie.recommender
               ? `Recommended by ${movie.recommender}`
@@ -177,7 +189,9 @@ export function MovieDetail({
             {movie.title}
           </h2>
 
-          <p className="text-muted-foreground mt-2 text-[15px]">{movie.director}</p>
+          <p className="text-muted-foreground mt-2 text-[15px]">
+            {movie.director}
+          </p>
 
           <div className="font-mono text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] tracking-widest uppercase">
             <span>{movie.year}</span>
@@ -207,11 +221,10 @@ export function MovieDetail({
             )}
           </p>
 
-          {movie.blurb ? (
-            <p className="text-muted-foreground mt-4 max-w-[46ch] text-[15px] leading-relaxed">
-              {movie.blurb}
-            </p>
-          ) : null}
+          <p className="text-muted-foreground mt-4 max-w-[46ch] text-[15px] leading-relaxed">
+            {movie.blurb ||
+              `A ${movie.genres?.[0]?.toLowerCase() ?? "memorable"} film from ${movie.year}, directed by ${movie.director}. Selected for this collection.`}
+          </p>
 
           {movie.genres?.length ? (
             <p className="font-mono text-muted-foreground mt-4 text-[11px] tracking-widest uppercase">
