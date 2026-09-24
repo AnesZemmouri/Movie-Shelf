@@ -1,0 +1,303 @@
+/* ---------------------------------------------------------------------------
+   The DVD keepcase itself.
+
+   Shared by two places, which is why it lives outside both of them:
+
+     src/mockup/CssKeepcase.tsx     the standalone study — the case is staged
+                                    inside .kc-stage, cover facing you, and
+                                    can swing open.
+     src/components/ShelfKeepcase.tsx  the archive — the same box, folded 90deg
+                                    about its left edge so the spine faces out,
+                                    with no opening.
+
+   Every face here is authored in the box's own space: the box spans z = 0 (back)
+   to z = spine (front cover), and x = 0 (spine, hinged side) to x = coverW. The
+   study pushes it back by halfSpine so it turns about its own centre; the shelf
+   does not, because it folds the whole thing about that left edge instead.
+
+   Because each face is built from that one model, the outward normals work out
+   to -x (spine), +x (right edge), -y (top), +y (bottom), +z (cover) and -z
+   (back) — so a single backface-visibility: hidden is correct for all of them.
+
+   Nothing here may depend on .kc-stage existing: the shelf supplies its
+   perspective from .shelf-scroller instead.
+   --------------------------------------------------------------------------- */
+
+/* -- the box -------------------------------------------------------------- */
+
+.kc-rig {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.kc-box {
+  position: relative;
+  transform-style: preserve-3d;
+  /* World units covered by one tile of the generated surfaces. The size lives
+     here rather than on a stage wrapper so the grain and the sheen mask tile at
+     the same physical size whether or not a stage is present. */
+  --tile: 110px;
+}
+
+/* Deliberately no `inset: 0` here — the four edge faces are positioned on one
+   axis only (left+width, right+width, …), and a shorthand inset would
+   over-constrain them and pin both edges to the same side. */
+.kc-face {
+  position: absolute;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.kc-back,
+.kc-cover {
+  inset: 0;
+}
+
+/* -- back of the case, which is also what you stare at through the shell ---- */
+
+.kc-back {
+  background: #121214;
+  border-radius: 3px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  transform: rotateY(180deg);
+}
+
+.kc-back-art {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.16;
+  filter: grayscale(1) contrast(1.35);
+}
+
+/* -- spine: vertical title, kept from the archive's own spine treatment ---- */
+
+.kc-spine {
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.kc-spine-band {
+  position: absolute;
+  inset-inline: 0;
+  height: 3px;
+  opacity: 0.9;
+}
+
+.kc-spine-title {
+  position: absolute;
+  inset: 14px 0 44px;
+  display: flex;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.08;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.kc-spine-dir {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 14px;
+  display: flex;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  overflow: hidden;
+  opacity: 0.72;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* -- the three edges the old two-plane shelf case was missing -------------- */
+
+/* These sit over the spine colour set inline, so the wall reads as the same
+   plastic shaded away from the light — not as bare chrome. */
+.kc-edge {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.09),
+    rgba(0, 0, 0, 0.06) 24%,
+    rgba(0, 0, 0, 0.58)
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.kc-edge-top {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.68)
+  );
+}
+
+.kc-edge-bottom {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.13),
+    rgba(0, 0, 0, 0.72)
+  );
+}
+
+/* -- disc tray, revealed when the cover swings (study only) ---------------- */
+
+.kc-tray {
+  position: absolute;
+  inset: 3%;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 45%, #212126, #0e0e11 78%);
+  box-shadow: inset 0 0 44px rgba(0, 0, 0, 0.75);
+  backface-visibility: hidden;
+}
+
+.kc-disc {
+  position: relative;
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 210deg,
+      rgba(255, 255, 255, 0.5),
+      rgba(150, 255, 220, 0.34),
+      rgba(255, 170, 220, 0.3),
+      rgba(160, 200, 255, 0.36),
+      rgba(255, 240, 190, 0.32),
+      rgba(255, 255, 255, 0.5)
+    ),
+    radial-gradient(circle, #d8dae0 18%, #9aa0ab 52%, #c9cdd6 100%);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.42),
+    0 3px 12px rgba(0, 0, 0, 0.55);
+}
+
+/* The hub hole, so the disc reads as a disc and not a coin. */
+.kc-disc::after {
+  content: "";
+  position: absolute;
+  inset: 44%;
+  border-radius: 50%;
+  background: #0d0d10;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+/* -- front cover ---------------------------------------------------------- */
+
+.kc-cover {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.kc-cover-outer,
+.kc-cover-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  backface-visibility: hidden;
+}
+
+.kc-cover-outer {
+  transform: translateZ(1px);
+  /* A dark seam where the cover meets the shell, not a bright outline. */
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.kc-cover-poster {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.kc-cover-inner {
+  transform: rotateY(180deg) translateZ(1px);
+  background: linear-gradient(150deg, #2a2a2f, #141417 70%);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Clear shells catch a tight bright specular; matte sleeves a broad soft one.
+   The angle rides the shared light control.
+
+   The mask is the CSS stand-in for a roughness map. CSS cannot vary a gradient
+   per pixel, but it CAN vary an element's opacity per pixel, so the alpha
+   channel of the generated roughness noise masks this layer off wherever the
+   plastic is dull. That is what turns the highlight from a clean sweep into the
+   broken patches real plastic produces. */
+.kc-sheen {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  mask-size: var(--tile, 110px) var(--tile, 110px);
+  mask-repeat: repeat;
+  -webkit-mask-size: var(--tile, 110px) var(--tile, 110px);
+  -webkit-mask-repeat: repeat;
+}
+
+/* Grain, blended over whatever it sits on. Overlay is a no-op against mid-grey,
+   which is why the generated grain canvas is centred rather than near-white. */
+.kc-grain {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: var(--tile, 110px) var(--tile, 110px);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.kc-hologram {
+  position: absolute;
+  inset: -10%;
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: screen;
+  filter: hue-rotate(80deg) saturate(1.7) contrast(1.3) brightness(1.25);
+  pointer-events: none;
+}
+
+.kc-wear {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent 12%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5), transparent 16%);
+}
+
+/* -- cover lockup, for cases with no poster art to print ------------------- */
+
+.kc-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: end;
+  gap: 0.35rem;
+  padding: 8%;
+  pointer-events: none;
+  text-shadow: 0 2px 16px #000;
+}
+
+.kc-label strong {
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+  font-weight: 400;
+  line-height: 0.88;
+}
+
+.kc-label span {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}

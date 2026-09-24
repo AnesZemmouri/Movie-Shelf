@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import type { Movie } from "../data/movies";
+import { surfaceTextures, type SurfaceUrls } from "../lib/textures";
 import { MovieCase } from "./MovieCase";
 import { MovieDetail } from "./MovieDetail";
 
@@ -30,7 +31,11 @@ type Props = {
 
 type OpenState = { movie: Movie; index: number; rect: DOMRect };
 
-export function Shelf({ movies, justAdded, onOpenChange }: Props) {
+export function Shelf({
+  movies,
+  justAdded,
+  onOpenChange,
+}: Props) {
   const scroller = useRef<HTMLDivElement | null>(null);
   const caseEls = useRef<(HTMLButtonElement | null)[]>([]);
   const carry = useRef<number | null>(null);
@@ -47,6 +52,23 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
   const [shouldLoop, setShouldLoop] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const [open, setOpen] = useState<OpenState | null>(null);
+
+  // The procedural noise field costs a few hundred ms to build. Generating it
+  // on the first tick rather than during render keeps that off the critical
+  // path, so the row is on screen before the surface detail arrives. It is
+  // cached module-level in lib/textures, so this runs once for the whole shelf,
+  // not once per case — every case then shares the same two data URLs.
+  const [surfaces, setSurfaces] = useState<SurfaceUrls | null>(null);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const generated = surfaceTextures();
+      setSurfaces({
+        grain: generated.grain,
+        sheenMask: generated.sheenMask,
+      });
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // Two different questions, previously conflated into one flag:
   //   shouldLoop — is the row long enough that 3 copies are worth the seamless wrap?
@@ -78,6 +100,14 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
       const t = Math.max(-1, Math.min(1, (cx - centre) / (vw / 2)));
       const eased = Math.sign(t) * Math.pow(Math.abs(t), RY_EXPONENT);
       node.style.setProperty("--ry", `${(-MAX_RY * eased).toFixed(2)}deg`);
+      // Paint order rides the same curve, and it has to. A case well left of
+      // centre turns its left face toward you, and that face reaches back over
+      // the neighbour on its left; on a real shelf the neighbour's spine stands
+      // in front of it. The mirror case holds on the right for the front cover.
+      // So the further out a case is, the later it must paint. DOM order already
+      // gives that on the right half and gives the opposite on the left, which
+      // is why this is computed rather than left to the row's order.
+      node.style.setProperty("--z", String(Math.round(Math.abs(eased) * 30)));
     }
   }, []);
 
@@ -269,6 +299,7 @@ export function Shelf({ movies, justAdded, onOpenChange }: Props) {
           <MovieCase
             key={`${m.id}-${i}`}
             movie={m}
+            surfaces={surfaces}
             justAdded={justAdded === m.id}
             caseRef={(el) => {
               caseEls.current[i] = el;

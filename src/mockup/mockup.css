@@ -1,0 +1,280 @@
+/* ---------------------------------------------------------------------------
+   DVD keepcase 3D mockup — standalone page chrome.
+   Prefixed mk- (page) so nothing collides with the archive styles in
+   styles.css. The case itself is NOT here: it is shared with the archive and
+   lives in src/components/keepcase.css, alongside the .kc-stage wrapper that
+   only this study uses.
+   --------------------------------------------------------------------------- */
+
+.mk-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: #0b0b0c;
+  color: oklch(0.91 0.025 82);
+}
+
+/* ---- header ------------------------------------------------------------- */
+
+.mk-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem clamp(1rem, 3vw, 2.5rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.mk-eyebrow,
+.mk-readout,
+.mk-control > span,
+.mk-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.mk-eyebrow {
+  color: oklch(0.64 0.025 72);
+}
+
+.mk-header h1 {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 2.9rem);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.mk-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mk-picker button,
+.mk-picker-button {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  background: transparent;
+  color: oklch(0.72 0.02 72);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 200ms ease,
+    color 200ms ease,
+    background-color 200ms ease;
+}
+
+.mk-picker button:hover,
+.mk-picker-button:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: oklch(0.92 0.02 82);
+}
+
+.mk-picker button[aria-pressed="true"],
+.mk-picker-button[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: oklch(0.72 0.14 62 / 0.14);
+  color: oklch(0.94 0.04 78);
+}
+
+/* ---- the two panels ----------------------------------------------------- */
+
+.mk-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mk-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.mk-panel:last-child {
+  border-right: 0;
+}
+
+.mk-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2.5rem) 0;
+}
+
+.mk-panel-head strong {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mk-panel-head span {
+  color: oklch(0.6 0.02 72);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+/* -- the study's staging --------------------------------------------------
+   The archive has no equivalent: the shelf supplies its perspective from
+   .shelf-scroller and folds the box about its own left edge, so only this page
+   centres a case in an absolutely-positioned stage. */
+
+.kc-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  /* perspective is set inline from the shared viewer distance, so it matches
+     the WebGL camera exactly. */
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.mk-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: min(64vh, 620px);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.mk-stage:active {
+  cursor: grabbing;
+}
+
+.mk-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.mk-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(255, 255, 255, 0.055),
+    transparent 62%
+  );
+}
+
+/* Contact shadow, deliberately OUTSIDE the 3D rig so it never rotates. */
+.mk-shadow {
+  position: absolute;
+  bottom: 12%;
+  width: 58%;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+.mk-canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mk-canvas-host {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ---- controls ----------------------------------------------------------- */
+
+.mk-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem 1.75rem;
+  padding: 1.25rem clamp(1rem, 3vw, 2.5rem) 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.mk-control {
+  display: grid;
+  gap: 0.4rem;
+  color: oklch(0.64 0.02 72);
+}
+
+.mk-control > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mk-control output {
+  color: oklch(0.88 0.03 80);
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-control input[type="range"] {
+  width: 100%;
+  accent-color: oklch(0.72 0.14 62);
+  cursor: pointer;
+}
+
+.mk-toggles {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.mk-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: oklch(0.72 0.02 74);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mk-toggle input {
+  accent-color: oklch(0.72 0.14 62);
+  cursor: pointer;
+}
+
+.mk-readout {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  color: oklch(0.6 0.02 72);
+}
+
+.mk-readout b {
+  color: oklch(0.88 0.03 80);
+  font-weight: 400;
+}
+
+@media (max-width: 980px) {
+  .mk-panels {
+    grid-template-columns: 1fr;
+  }
+  .mk-panel {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+}
